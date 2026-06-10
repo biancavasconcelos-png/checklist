@@ -1,9 +1,10 @@
 // ============================================================
 // app.js — Checklist App
-// Substitua as duas linhas abaixo com os dados do seu projeto
+// As credenciais ficam em config.js (não versionado).
+// Veja o README para configurar no Vercel.
 // ============================================================
-const SUPABASE_URL = 'https://SEU_PROJETO.supabase.co';
-const SUPABASE_ANON_KEY = 'SUA_ANON_KEY';
+const SUPABASE_URL      = 'https://lfijpygtgucltzpgrcqg.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmaWpweWd0Z3VjbHR6cGdyY3FnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMDA2NTAsImV4cCI6MjA5NjY3NjY1MH0.d9_NsRUVttVx0DSs1eoc3fZKbFie_FlpfEUmTocWmGE';
 
 // ── Supabase client ──────────────────────────────────────────
 const { createClient } = supabase;

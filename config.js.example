@@ -1,0 +1,5 @@
+// config.js — NÃO suba este arquivo com credenciais reais para o git!
+// Adicione config.js ao seu .gitignore
+// No Vercel, use o Build Command abaixo para gerá-lo automaticamente.
+window.__SUPABASE_URL__      = 'https://SEU_PROJETO.supabase.co';
+window.__SUPABASE_ANON_KEY__ = 'SUA_ANON_KEY';
