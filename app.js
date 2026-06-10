@@ -19,45 +19,85 @@ let filterPriority = 'all';  // all | low | medium | high
 let sortBy = 'position';     // position | due_date | priority | created_at
 
 // ── Auth ─────────────────────────────────────────────────────
+// ── Auth ─────────────────────────────────────────────────────
 async function signUp() {
-  const email = document.getElementById('auth-email').value.trim();
-  const pass  = document.getElementById('auth-pass').value;
-  const { error } = await db.auth.signUp({ email, password: pass });
-  if (error) return showAuthError(error.message);
-  showAuthError('Confirme seu e-mail para entrar!', 'success');
-}
-
-async function signIn() {
-  const email = document.getElementById('auth-email').value.trim();
-  const pass  = document.getElementById('auth-pass').value;
-  const { error } = await db.auth.signInWithPassword({ email, password: pass });
-  if (error) showAuthError(error.message);
-}
-
-async function signOut() {
-  await db.auth.signOut();
-}
-
-function showAuthError(msg, type = 'error') {
-  const el = document.getElementById('auth-msg');
-  el.textContent = msg;
-  el.className = 'auth-msg ' + type;
-}
-
-// ── Session listener ─────────────────────────────────────────
-db.auth.onAuthStateChange(async (_event, session) => {
-  currentUser = session?.user ?? null;
-  document.getElementById('auth-screen').hidden  = !!currentUser;
-  document.getElementById('app-screen').hidden   = !currentUser;
-  if (currentUser) {
-    document.getElementById('user-email').textContent = currentUser.email;
-    await loadTasks();
-  } else {
+    const email = document.getElementById('auth-email').value.trim();
+    const pass  = document.getElementById('auth-pass').value;
+  
+    const { error } = await db.auth.signUp({
+      email,
+      password: pass
+    });
+  
+    if (error) return showAuthError(error.message);
+  
+    showAuthError('Confirme seu e-mail para entrar!', 'success');
+  }
+  
+  async function signIn() {
+    const email = document.getElementById('auth-email').value.trim();
+    const pass  = document.getElementById('auth-pass').value;
+  
+    const { data, error } = await db.auth.signInWithPassword({
+      email,
+      password: pass
+    });
+  
+    if (error) return showAuthError(error.message);
+  
+    if (data.session) {
+      showApp(data.session.user);
+    }
+  }
+  
+  async function signOut() {
+    await db.auth.signOut();
+  }
+  
+  function showAuthError(msg, type = 'error') {
+    const el = document.getElementById('auth-msg');
+    el.textContent = msg;
+    el.className = 'auth-msg ' + type;
+  }
+  
+  function showApp(user) {
+    currentUser = user;
+  
+    document.getElementById('auth-screen').hidden = true;
+    document.getElementById('app-screen').hidden  = false;
+  
+    document.getElementById('user-email').textContent = user.email;
+  
+    loadTasks();
+  }
+  
+  function showLogin() {
+    currentUser = null;
+  
+    document.getElementById('auth-screen').hidden = false;
+    document.getElementById('app-screen').hidden  = true;
+  
     tasks = [];
     renderTasks();
   }
-});
-
+  
+  // Verifica sessão ao carregar a página
+  db.auth.getSession().then(({ data }) => {
+    if (data.session) {
+      showApp(data.session.user);
+    } else {
+      showLogin();
+    }
+  });
+  
+  // Reage a login/logout
+  db.auth.onAuthStateChange((_event, session) => {
+    if (session) {
+      showApp(session.user);
+    } else {
+      showLogin();
+    }
+  });
 // ── CRUD ─────────────────────────────────────────────────────
 async function loadTasks() {
   const { data, error } = await db
