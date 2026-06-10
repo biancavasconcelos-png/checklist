@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Checklist</title>
+  <title>Checklist Pré-Cirúrgico</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    /* ── Reset & Base ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     [hidden] { display: none !important; }
 
@@ -39,93 +38,48 @@
       line-height: 1.5;
     }
 
-    /* ── Auth Screen ── */
+    /* ── Auth ── */
     #auth-screen {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 2rem;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; padding: 2rem;
     }
-
     .auth-card {
-      background: var(--surface);
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-      padding: 2.5rem 2rem;
-      width: 100%;
-      max-width: 380px;
+      background: var(--surface); border-radius: 16px; box-shadow: var(--shadow);
+      padding: 2.5rem 2rem; width: 100%; max-width: 380px;
     }
-
-    .auth-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 2rem;
-    }
-
+    .auth-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 2rem; }
     .auth-logo .icon {
-      width: 36px; height: 36px;
-      background: var(--accent);
-      border-radius: 8px;
+      width: 36px; height: 36px; background: var(--accent); border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
     }
-
     .auth-logo .icon svg { stroke: #fff; }
     .auth-logo h1 { font-size: 18px; font-weight: 600; }
-
     .auth-card h2 { font-size: 20px; font-weight: 600; margin-bottom: .25rem; }
     .auth-card p  { color: var(--text-muted); font-size: 13px; margin-bottom: 1.5rem; }
-
     .form-group { margin-bottom: 1rem; }
     .form-group label { display: block; font-size: 13px; font-weight: 500; margin-bottom: .4rem; }
-
-    input[type="email"],
-    input[type="password"],
-    input[type="text"],
-    input[type="date"],
-    select {
-      width: 100%;
-      padding: .6rem .85rem;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      font-size: 14px;
-      background: var(--surface);
-      color: var(--text);
-      outline: none;
-      transition: border-color .15s;
+    input[type="email"], input[type="password"], input[type="text"], input[type="date"], select {
+      width: 100%; padding: .6rem .85rem; border: 1px solid var(--border);
+      border-radius: var(--radius); font-size: 14px; background: var(--surface);
+      color: var(--text); outline: none; transition: border-color .15s;
     }
-
     input:focus, select:focus { border-color: var(--accent); }
-
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-      padding: .65rem 1.2rem;
-      border-radius: var(--radius);
-      font-size: 14px; font-weight: 500;
-      cursor: pointer;
-      border: none;
-      transition: opacity .15s, transform .1s;
+      padding: .65rem 1.2rem; border-radius: var(--radius); font-size: 14px;
+      font-weight: 500; cursor: pointer; border: none; transition: opacity .15s, transform .1s;
     }
-
     .btn:active { transform: scale(.98); }
     .btn-primary { background: var(--accent); color: #fff; width: 100%; }
     .btn-primary:hover { opacity: .9; }
-    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); width: 100%; margin-top: .5rem; }
-    .btn-outline:hover { background: var(--surface2); }
-
     .auth-msg { font-size: 13px; margin-top: .75rem; text-align: center; }
-    .auth-msg.error   { color: var(--danger); }
-    .auth-msg.success { color: var(--low); }
+    .auth-msg.error { color: var(--danger); }
 
-    /* ── App Layout ── */
-    #app-screen { max-width: 720px; margin: 0 auto; padding: 2rem 1rem 4rem; }
-
+    /* ── Shared header ── */
     .app-header {
       display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 1.5rem;
     }
-
     .app-header-left { display: flex; align-items: center; gap: 10px; }
     .app-header-left .icon {
       width: 32px; height: 32px; background: var(--accent); border-radius: 8px;
@@ -140,64 +94,74 @@
     }
     .btn-signout:hover { background: var(--surface2); }
 
-    /* ── Stats ── */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
+    /* ── Patient Screen ── */
+    #patient-screen { max-width: 620px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+
+    .add-card {
+      background: var(--surface); border-radius: var(--radius);
+      border: 1px solid var(--border); padding: 1rem; margin-bottom: 1.25rem;
+    }
+    .add-card h2 { font-size: 14px; font-weight: 600; margin-bottom: .85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .04em; }
+    .add-row { display: flex; gap: 8px; margin-bottom: 8px; }
+    .add-row input { flex: 1; }
+    .add-row .btn-primary { flex-shrink: 0; width: auto; padding: .6rem 1.1rem; }
+
+    .patient-item {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: .85rem 1rem; cursor: pointer;
+      transition: box-shadow .15s;
+    }
+    .patient-item:hover { box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+    #patient-list { display: flex; flex-direction: column; gap: 6px; }
+    .patient-info { display: flex; flex-direction: column; gap: 2px; }
+    .patient-name { font-size: 15px; font-weight: 500; }
+    .patient-pron { font-size: 12px; color: var(--text-muted); }
+    .patient-actions { display: flex; gap: 4px; align-items: center; }
+
+    /* ── App Screen (checklist) ── */
+    #app-screen { max-width: 720px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: none; border: 1px solid var(--border); border-radius: 8px;
+      padding: .35rem .8rem; font-size: 13px; cursor: pointer; color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+    .back-btn:hover { background: var(--surface2); }
+
+    .patient-banner {
+      background: var(--accent-soft); border: 1px solid #c5cbff;
+      border-radius: var(--radius); padding: .65rem 1rem;
+      font-size: 13px; font-weight: 500; color: var(--accent);
       margin-bottom: 1.25rem;
     }
 
-    .stat-card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: .85rem 1rem;
-      border: 1px solid var(--border);
-      text-align: center;
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 10px; margin-bottom: 1.25rem;
     }
-
+    .stat-card {
+      background: var(--surface); border-radius: var(--radius);
+      padding: .85rem 1rem; border: 1px solid var(--border); text-align: center;
+    }
     .stat-card .stat-value { font-size: 22px; font-weight: 600; }
     .stat-card .stat-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; text-transform: uppercase; letter-spacing: .04em; }
     .stat-card.danger .stat-value  { color: var(--high); }
     .stat-card.success .stat-value { color: var(--low); }
 
-    /* ── Progress ── */
     .progress-wrap { margin-bottom: 1.5rem; }
     .progress-header { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
-    .progress-track {
-      height: 6px; background: var(--surface2); border-radius: 999px; overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%; background: var(--accent); border-radius: 999px;
-      transition: width .4s ease;
-    }
-
-    /* ── Add task form ── */
-    .add-card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      padding: 1rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .add-row {
-      display: flex; gap: 8px; margin-bottom: 8px;
-    }
-
-    .add-row input[type="text"] { flex: 1; }
+    .progress-track { height: 6px; background: var(--surface2); border-radius: 999px; overflow: hidden; }
+    .progress-fill  { height: 100%; background: var(--accent); border-radius: 999px; transition: width .4s ease; }
 
     .add-meta { display: flex; gap: 8px; align-items: center; }
     .add-meta select, .add-meta input[type="date"] { flex: 1; }
     .add-meta .btn-primary { flex-shrink: 0; padding: .6rem 1.1rem; width: auto; }
 
-    /* ── Filters & Sort ── */
     .toolbar {
-      display: flex; align-items: center; gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem;
     }
-
     .filter-group { display: flex; gap: 4px; }
     .filter-btn {
       padding: .3rem .8rem; border-radius: 99px; font-size: 13px;
@@ -205,81 +169,48 @@
       transition: all .15s;
     }
     .filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-
     .toolbar select {
-      padding: .3rem .7rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 13px;
-      background: var(--surface);
-      cursor: pointer;
-      width: auto;
+      padding: .3rem .7rem; border: 1px solid var(--border); border-radius: 8px;
+      font-size: 13px; background: var(--surface); cursor: pointer; width: auto;
     }
-
     .toolbar-spacer { flex: 1; }
-
     .btn-clear {
       background: none; border: 1px solid var(--border); border-radius: 8px;
       padding: .3rem .75rem; font-size: 12px; cursor: pointer; color: var(--text-muted);
     }
     .btn-clear:hover { background: var(--surface2); }
 
-    /* ── Task list ── */
     #task-list { display: flex; flex-direction: column; gap: 6px; }
-
     .task-item {
       display: flex; align-items: center; gap: 10px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: .75rem 1rem;
-      transition: box-shadow .15s, opacity .15s;
-      cursor: default;
-      border-left: 3px solid transparent;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: .75rem 1rem;
+      transition: box-shadow .15s, opacity .15s; cursor: default;
     }
-
-    .task-item.priority-high   { border-left-color: var(--high); }
-    .task-item.priority-medium { border-left-color: var(--medium); }
-    .task-item.priority-low    { border-left-color: var(--low); }
-    .task-item.done { opacity: .6; }
+    .task-item.priority-high   { border-left: 3px solid var(--high); }
+    .task-item.priority-medium { border-left: 3px solid var(--medium); }
+    .task-item.priority-low    { border-left: 3px solid var(--low); }
     .task-item.dragging { box-shadow: 0 8px 24px rgba(0,0,0,.12); opacity: .85; }
     .task-item:hover { box-shadow: 0 2px 8px rgba(0,0,0,.06); }
-
-    .drag-handle {
-      color: var(--text-muted); opacity: .4; cursor: grab;
-      display: flex; align-items: center; flex-shrink: 0;
-    }
-
+    .drag-handle { color: var(--text-muted); opacity: .4; cursor: grab; display: flex; align-items: center; flex-shrink: 0; }
     .drag-handle:hover { opacity: 1; }
-
     .check-btn {
-      width: 22px; height: 22px; border-radius: 50%;
-      border: 2px solid var(--border);
-      background: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
+      width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border);
+      background: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
       flex-shrink: 0; transition: all .15s;
     }
-
     .check-btn.checked { background: var(--accent); border-color: var(--accent); color: #fff; }
     .check-btn:hover:not(.checked) { border-color: var(--accent); }
-
     .task-body { flex: 1; min-width: 0; }
     .task-title { font-size: 14px; display: block; word-break: break-word; }
     .task-item.done .task-title { text-decoration: line-through; color: var(--text-muted); }
     .task-meta { display: flex; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
-
-    .badge {
-      font-size: 11px; font-weight: 500; padding: 2px 8px;
-      border-radius: 99px; display: inline-flex; align-items: center;
-    }
-
+    .badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 99px; display: inline-flex; align-items: center; }
     .priority-badge.high   { background: var(--high-bg);   color: var(--high); }
     .priority-badge.medium { background: var(--medium-bg); color: var(--medium); }
     .priority-badge.low    { background: var(--low-bg);    color: var(--low); }
-
     .due-badge { background: var(--surface2); color: var(--text-muted); }
     .due-badge.overdue { background: var(--high-bg); color: var(--high); }
-
     .task-actions { display: flex; gap: 4px; flex-shrink: 0; }
     .icon-btn {
       background: none; border: none; cursor: pointer;
@@ -289,36 +220,26 @@
     .icon-btn:hover { background: var(--surface2); color: var(--text); }
     .icon-btn.danger:hover { background: var(--high-bg); color: var(--danger); }
 
-    /* ── Empty state ── */
-    .empty-state {
-      text-align: center; padding: 3rem 1rem;
-      color: var(--text-muted);
-    }
+    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-muted); }
     .empty-state svg { margin-bottom: 1rem; stroke: var(--text-muted); opacity: .4; }
     .empty-state p { font-size: 14px; }
 
-    /* ── Edit modal ── */
+    /* ── Modal ── */
     #edit-modal {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,.4);
-      align-items: center; justify-content: center;
-      padding: 1rem; z-index: 100;
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4);
+      align-items: center; justify-content: center; padding: 1rem; z-index: 100;
     }
     #edit-modal.open { display: flex; }
-
     .modal-card {
-      background: var(--surface);
-      border-radius: 16px;
-      padding: 1.75rem;
-      width: 100%; max-width: 400px;
-      box-shadow: 0 16px 48px rgba(0,0,0,.2);
+      background: var(--surface); border-radius: 16px; padding: 1.75rem;
+      width: 100%; max-width: 400px; box-shadow: 0 16px 48px rgba(0,0,0,.2);
     }
-
     .modal-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 1.25rem; }
     .modal-footer { display: flex; gap: 8px; margin-top: 1.25rem; }
     .modal-footer .btn { flex: 1; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .btn-outline:hover { background: var(--surface2); }
 
-    /* ── Responsive ── */
     @media (max-width: 500px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .add-meta { flex-wrap: wrap; }
@@ -335,27 +256,63 @@
       <div class="icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
       </div>
-      <h1>Checklist</h1>
+      <h1>Checklist Pré-Cirúrgico</h1>
     </div>
     <h2>Bem-vindo</h2>
-    <p>Entre ou crie sua conta para continuar.</p>
+    <p>Entre com sua conta para continuar.</p>
     <div class="form-group">
       <label for="auth-email">E-mail</label>
       <input type="email" id="auth-email" placeholder="seu@email.com" />
     </div>
     <div class="form-group">
       <label for="auth-pass">Senha</label>
-      <input type="password" id="auth-pass" placeholder="Mínimo 6 caracteres" />
+      <input type="password" id="auth-pass" placeholder="Sua senha" />
     </div>
     <button class="btn btn-primary" onclick="signIn()">Entrar</button>
     <p class="auth-msg" id="auth-msg"></p>
   </div>
 </div>
 
-<!-- ── App Screen ── -->
+<!-- ── Patient Screen ── -->
+<div id="patient-screen" hidden>
+  <div style="max-width:620px;margin:0 auto;padding:2rem 1rem 4rem">
+
+    <header class="app-header">
+      <div class="app-header-left">
+        <div class="icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        </div>
+        <h1>Pacientes</h1>
+      </div>
+      <div class="user-info">
+        <span id="user-email"></span>
+        <button class="btn-signout" onclick="signOut()">Sair</button>
+      </div>
+    </header>
+
+    <!-- Adicionar paciente -->
+    <div class="add-card">
+      <h2>Novo paciente</h2>
+      <div class="add-row">
+        <input type="text" id="patient-name" placeholder="Nome do paciente" />
+      </div>
+      <div class="add-row">
+        <input type="text" id="patient-pron" placeholder="Número do prontuário" />
+        <button class="btn btn-primary" onclick="addPatient()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Adicionar
+        </button>
+      </div>
+    </div>
+
+    <div id="patient-list"></div>
+  </div>
+</div>
+
+<!-- ── Checklist Screen ── -->
 <div id="app-screen" hidden>
 
-  <header class="app-header">
+  <header class="app-header" style="max-width:720px;margin:0 auto;padding:2rem 1rem 0">
     <div class="app-header-left">
       <div class="icon">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
@@ -363,93 +320,100 @@
       <h1>Checklist</h1>
     </div>
     <div class="user-info">
-      <span id="user-email"></span>
       <button class="btn-signout" onclick="signOut()">Sair</button>
     </div>
   </header>
 
-  <!-- Stats -->
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-value" id="stat-total">0</div>
-      <div class="stat-label">Total</div>
-    </div>
-    <div class="stat-card success">
-      <div class="stat-value" id="stat-done">0</div>
-      <div class="stat-label">Concluídas</div>
-    </div>
-    <div class="stat-card danger">
-      <div class="stat-value" id="stat-high">0</div>
-      <div class="stat-label">Alta prioridade</div>
-    </div>
-    <div class="stat-card danger">
-      <div class="stat-value" id="stat-overdue">0</div>
-      <div class="stat-label">Vencidas</div>
-    </div>
-  </div>
+  <div style="max-width:720px;margin:0 auto;padding:.75rem 1rem 4rem">
 
-  <!-- Progress -->
-  <div class="progress-wrap">
-    <div class="progress-header">
-      <span>Progresso</span>
-      <span id="progress-pct">0%</span>
-    </div>
-    <div class="progress-track">
-      <div class="progress-fill" id="progress-bar" style="width:0%"></div>
-    </div>
-  </div>
+    <button class="back-btn" onclick="backToPatients()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Voltar aos pacientes
+    </button>
 
-  <!-- Add task -->
-  <div class="add-card">
-    <div class="add-row">
-      <input type="text" id="task-input" placeholder="Nova tarefa..." />
+    <div class="patient-banner" id="patient-label"></div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-label">Total</div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-value" id="stat-done">0</div>
+        <div class="stat-label">Concluídas</div>
+      </div>
+      <div class="stat-card danger">
+        <div class="stat-value" id="stat-high">0</div>
+        <div class="stat-label">Alta prioridade</div>
+      </div>
+      <div class="stat-card danger">
+        <div class="stat-value" id="stat-overdue">0</div>
+        <div class="stat-label">Vencidas</div>
+      </div>
     </div>
-    <div class="add-meta">
-      <select id="task-priority">
-        <option value="low">🟢 Baixa</option>
-        <option value="medium" selected>🟡 Média</option>
-        <option value="high">🔴 Alta</option>
+
+    <!-- Progress -->
+    <div class="progress-wrap">
+      <div class="progress-header">
+        <span>Progresso</span>
+        <span id="progress-pct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-bar" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Add task -->
+    <div class="add-card">
+      <div class="add-row">
+        <input type="text" id="task-input" placeholder="Nova tarefa pré-cirúrgica..." />
+      </div>
+      <div class="add-meta">
+        <select id="task-priority">
+          <option value="low">🟢 Baixa</option>
+          <option value="medium" selected>🟡 Média</option>
+          <option value="high">🔴 Alta</option>
+        </select>
+        <input type="date" id="task-due" title="Prazo" />
+        <button class="btn btn-primary" onclick="addTask()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Adicionar
+        </button>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="filter-group">
+        <button class="filter-btn active" data-status="all"    onclick="setFilter('all')">Todas</button>
+        <button class="filter-btn"        data-status="active" onclick="setFilter('active')">Pendentes</button>
+        <button class="filter-btn"        data-status="done"   onclick="setFilter('done')">Concluídas</button>
+      </div>
+      <select onchange="setPriorityFilter(this.value)">
+        <option value="all">Todas as prioridades</option>
+        <option value="high">Alta</option>
+        <option value="medium">Média</option>
+        <option value="low">Baixa</option>
       </select>
-      <input type="date" id="task-due" title="Prazo" />
-      <button class="btn btn-primary" onclick="addTask()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Adicionar
-      </button>
+      <select onchange="setSort(this.value)">
+        <option value="position">Ordem manual</option>
+        <option value="due_date">Prazo</option>
+        <option value="priority">Prioridade</option>
+        <option value="created_at">Mais recentes</option>
+      </select>
+      <div class="toolbar-spacer"></div>
+      <button class="btn-clear" onclick="clearCompleted()">Limpar concluídas</button>
     </div>
+
+    <div id="task-list"></div>
   </div>
-
-  <!-- Toolbar -->
-  <div class="toolbar">
-    <div class="filter-group">
-      <button class="filter-btn active" data-status="all"    onclick="setFilter('all')">Todas</button>
-      <button class="filter-btn"        data-status="active" onclick="setFilter('active')">Pendentes</button>
-      <button class="filter-btn"        data-status="done"   onclick="setFilter('done')">Concluídas</button>
-    </div>
-    <select onchange="setPriorityFilter(this.value)" title="Filtrar por prioridade">
-      <option value="all">Todas as prioridades</option>
-      <option value="high">Alta</option>
-      <option value="medium">Média</option>
-      <option value="low">Baixa</option>
-    </select>
-    <select onchange="setSort(this.value)" title="Ordenar">
-      <option value="position">Ordem manual</option>
-      <option value="due_date">Prazo</option>
-      <option value="priority">Prioridade</option>
-      <option value="created_at">Mais recentes</option>
-    </select>
-    <div class="toolbar-spacer"></div>
-    <button class="btn-clear" onclick="clearCompleted()">Limpar concluídas</button>
-  </div>
-
-  <!-- Task list -->
-  <div id="task-list"></div>
-
 </div>
 
 <!-- ── Edit Modal ── -->
-<div id="edit-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+<div id="edit-modal" role="dialog" aria-modal="true">
   <div class="modal-card">
-    <h3 id="modal-title">Editar tarefa</h3>
+    <h3>Editar tarefa</h3>
     <input type="hidden" id="edit-id" />
     <div class="form-group">
       <label for="edit-title">Título</label>
